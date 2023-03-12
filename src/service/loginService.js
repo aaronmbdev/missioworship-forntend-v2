@@ -16,6 +16,8 @@ export default function backendLogin(token) {
         localStorage.setItem("name", decoded.name);
         localStorage.setItem("user_id", decoded.id);
         localStorage.setItem("profile_pic", decoded.profilePicUrl);
+        localStorage.setItem("roles", decoded.roles);
+        localStorage.setItem("clearanceLevel", decoded.clearanceLevel);
         window.location.replace("/");
     }).catch(function (err) {
         let errs = err.response.data.problems;
