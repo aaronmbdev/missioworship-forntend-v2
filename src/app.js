@@ -13,7 +13,7 @@ function App(props) {
     let name = localStorage.getItem("name");
     let section = (<DashboardSection />);
 
-    if(props.section == "admin") {
+    if(props.section === "admin") {
         section = (<AdminSection />);
     }
 
