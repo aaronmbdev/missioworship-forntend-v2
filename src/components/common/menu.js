@@ -2,7 +2,7 @@
 const AdminTabLink = (props) => {
     if(props.clearanceLevel === "2") {
         return (<li className="nav-item">
-                    <a className="nav-link" href="index.html">
+                    <a className="nav-link" href="/administracion">
                         <i className="mdi mdi-security mr-2"></i>Administración
                     </a>
                 </li>);
@@ -23,19 +23,19 @@ const Menu = () => {
                             <AdminTabLink clearanceLevel={clearanceLevel}/>
     
                             <li className="nav-item">
-                                <a className="nav-link" href="index.html">
+                                <a className="nav-link" href="/asistencia">
                                     <i className="mdi mdi-account-check mr-2"></i>Asistencia
                                 </a>
                             </li>
 
                             <li className="nav-item">
-                                <a className="nav-link" href="index.html">
+                                <a className="nav-link" href="/planning">
                                     <i className="mdi mdi-notebook mr-2"></i>Planning mensual
                                 </a>
                             </li>   
 
                             <li className="nav-item">
-                                <a className="nav-link" href="index.html">
+                                <a className="nav-link" href="/canciones">
                                     <i className="mdi mdi-music mr-2"></i>Listado de canciones
                                 </a>
                             </li>   

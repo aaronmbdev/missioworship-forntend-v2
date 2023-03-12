@@ -3,16 +3,21 @@ import 'alertifyjs/build/css/alertify.css';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import Dashboard from './pages/dashboard';
+import App from './app';
 import Login from "./pages/login"
 import Logout from './pages/logout';
+import NotFound from './pages/404';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard />,
+    element: <App />,
+  },
+  {
+    path: "/administracion",
+    element: <App section="admin" />
   },
   {
     path: "/login",
@@ -21,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     element: <Logout />
+  },
+  {
+    path: "*",
+    element: <NotFound />
   }
 ]);
 
