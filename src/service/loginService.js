@@ -1,10 +1,10 @@
 import alertify from "alertifyjs";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
-import getEndpoint from "./backendService";
+import BackendService from "./backendService";
 
 export default function backendLogin(token) {
-    let uri = getEndpoint("/v1/login/");
+    let uri = BackendService.getEndpoint("/v1/login/");
     axios.post(uri, {
         token: token
     }).then(function (response) {

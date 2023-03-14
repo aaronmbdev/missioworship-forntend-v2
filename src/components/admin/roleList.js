@@ -1,8 +1,9 @@
-import getRoleList from "../../service/roleService";
+import RoleService from "../../service/roleService";
 import React from "react";
 import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from '@mui/material';
-import alertify from "alertifyjs";
+import AuthLevel from "./authLevel";
+import BackendService from "../../service/backendService";
 
 class RoleList extends React.Component {
 
@@ -23,7 +24,7 @@ class RoleList extends React.Component {
                             columns={[
                                 {title: "Id", field: "id"},
                                 {title: "Rol", field: "name"},
-                                {title: "Nivel de autorización", field: "clearance"}
+                                {title: "Nivel de autorización", render: rowData => <AuthLevel level={rowData.clearance}/>}
                             ]}
                             actions={[
                                 {
@@ -40,17 +41,23 @@ class RoleList extends React.Component {
                               ]}
                               data={query =>
                                 new Promise((resolve) => {
-                                    getRoleList(localStorage.getItem("auth_token"))
+                                    RoleService.getRoleList(localStorage.getItem("auth_token"))
                                     .then(function(response) {
                                         resolve({
                                             data: response.data,
                                             page: 0,
                                             totalCount: response.data.length
                                         });
-                                    }).catch(function(err){
-                                        alertify.error(err.response.data.problems[0]);
+                                    }).catch((err) => {
+                                        BackendService.defaultErrorTreatment(err);
                                     });
                                 })
+                            }
+                            options={
+                                {
+                                    search: false,
+                                    paging: false
+                                }
                             }
                         />
                     </ThemeProvider>
