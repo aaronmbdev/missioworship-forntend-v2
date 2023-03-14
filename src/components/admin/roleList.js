@@ -4,12 +4,46 @@ import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from '@mui/material';
 import AuthLevel from "./authLevel";
 import BackendService from "../../service/backendService";
+import Swal from 'sweetalert2'
+import alertify from "alertifyjs";
 
 class RoleList extends React.Component {
 
+    tableRef = React.createRef();
+
+    deleteRole(id, name) {
+        let context = this;
+        let token = localStorage.getItem("auth_token");
+        Swal.fire({
+            title: 'Confirmación',
+            text: 'Estás a punto de eliminar el rol ' + name + ' esto no puede revertise y los usuarios perderán el rol. ¿Seguro?',
+            icon: 'warning',
+            confirmButtonText: 'Seguro',
+            cancelButtonText: 'Mejor me lo pienso',
+            showCancelButton: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+                if(id !== 1) {
+                    RoleService.deleteRole(token, id)
+                    .then(() => {
+                        alertify.success("Se ha eliminado el rol "+ name + " correctamente");
+                        context.tableRef.current.onQueryChange();
+                    }).catch((err) => {
+                        BackendService.defaultErrorTreatment(err);
+                    })
+                } else {
+                    Swal.fire(
+                    'Error',
+                    'El rol '+ name + ' pertenece a los administradores, si te lo cargas nadie podrá ser administrador.',
+                    'error'
+                    )
+                }
+            }
+          })
+    }
+
     render() {
         const defaultMaterialTheme = createTheme();
-        let tableRef = React.createRef();
         return (
             <div className="card">
                 <div className="card-body">
@@ -20,7 +54,7 @@ class RoleList extends React.Component {
                     <ThemeProvider theme={defaultMaterialTheme}>
                         <MaterialTable 
                             title="Roles"
-                            tableRef={tableRef}
+                            tableRef={this.tableRef}
                             columns={[
                                 {title: "Id", field: "id"},
                                 {title: "Rol", field: "name"},
@@ -30,13 +64,13 @@ class RoleList extends React.Component {
                                 {
                                   icon: 'delete',
                                   tooltip: 'Eliminar rol',
-                                  onClick: (event, rowData) => alert("You saved " + rowData.name)
+                                  onClick: (event, rowData) => this.deleteRole(rowData.id, rowData.name)
                                 },
                                 {
                                     icon: 'refresh',
                                     tooltip:'Actualizar datos',
                                     isFreeAction: true,
-                                    onClick: () => tableRef.current && tableRef.current.onQueryChange()
+                                    onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange()
                                 }
                               ]}
                               data={query =>
