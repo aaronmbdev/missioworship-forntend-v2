@@ -5,6 +5,7 @@ import BackendService from "../../service/backendService";
 import Swal from 'sweetalert2'
 import alertify from "alertifyjs";
 import UserService from "../../service/userService";
+import RoleListElement from "./roleListElement";
 
 class UserList extends React.Component {
 
@@ -47,7 +48,7 @@ class UserList extends React.Component {
                                 {title: "Id", field: "id"},
                                 {title: "Nombre", field: "name"},
                                 {title: "Correo", field: "email"},
-                                {title: "Roles", render: rowData => <p>Hola</p>}
+                                {title: "Roles", render: rowData => <RoleListElement roles={rowData.roles} />}
                             ]}
                             actions={[
                                 {
@@ -64,14 +65,17 @@ class UserList extends React.Component {
                               ]}
                               data={query =>
                                 new Promise((resolve) => {
-                                    UserService.getUserList(localStorage.getItem("auth_token"))
+                                    let limit = query.pageSize;
+                                    let offset = query.page * limit;
+                                    UserService.getUserList(localStorage.getItem("auth_token"), limit, offset)
                                     .then(function(response) {
                                         resolve({
-                                            data: response.data,
-                                            page: 0,
-                                            totalCount: response.data.length
+                                            data: response.data.values,
+                                            page: query.page,
+                                            totalCount: response.data.total_count
                                         });
                                     }).catch((err) => {
+                                        console.log(err);
                                         BackendService.defaultErrorTreatment(err);
                                     });
                                 })

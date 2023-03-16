@@ -1,8 +1,19 @@
+import BackendService from "./backendService";
+import axios from "axios";
 
 export default class UserService {
 
+    static user_uri = BackendService.getEndpoint("/v1/user/");
+
     static createUser(token, name, email, roles) {
-        return null;
+        return axios.post(this.user_uri, {
+            name: name,
+            email: email,
+            roles: roles
+        }, {
+            headers: BackendService.buildAuthHeader(token)
+
+        });
     }
     
     static getUserDetails(token, id) {
@@ -10,7 +21,10 @@ export default class UserService {
     }
 
     static deleteUser(token, id) {
-        return null;
+        let uri = this.user_uri + id;
+        return axios.delete(uri, {
+            headers: BackendService.buildAuthHeader(token)
+        });
     }
 
     static updateUserData(token, name, email, roles) {
@@ -18,6 +32,12 @@ export default class UserService {
     }
 
     static getUserList(token, limit, offset) {
-        return null;
+        return axios.get(this.user_uri, {
+            params: {
+                limit: limit,
+                offset: offset
+            },
+            headers: BackendService.buildAuthHeader(token)
+        });
     }
 }

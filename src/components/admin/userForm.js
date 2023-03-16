@@ -2,12 +2,16 @@ import {Component} from "react";
 import RoleService from "../../service/roleService";
 import alertify from "alertifyjs";
 import BackendService from "../../service/backendService";
+import AsyncSelect from 'react-select/async';
+import UserService from "../../service/userService";
+
 class UserForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: "",
-            authLevel: 0,
+            email: "",
+            roles: 0,
             creating: false
         }
     }
@@ -16,40 +20,65 @@ class UserForm extends Component {
             name: e.target.value
         })
     }
-    changeAuthLevel(e) {
+    changeEmail(e) {
         this.setState({
-            authLevel: e.target.value
+            email: e.target.value
         })
     }
-    createRol() {
+    changeSelectedRoles(e) {
+        this.setState({
+            roles: e
+        })
+    }
+    createUser() {
         let context = this;
-        let {name, authLevel} = this.state;
+        let {name, roles, email} = this.state;
+        let uploadable_roles = [];
+        roles.forEach(element => {
+            uploadable_roles.push(element.value);
+        });
         let token = localStorage.getItem("auth_token");
-        if(name !== "") {
+        if(name !== "" && email !== "") {
             this.setState({creating: true});
-            RoleService.createRole(token, name, authLevel)
+            UserService.createUser(token, name, email, uploadable_roles)
                 .then(() => {
-                    alertify.success("Se ha creado el rol "+ name + " correctamente");
+                    alertify.success("Se ha creado el usuario "+ name + " correctamente");
                 }).catch((err) => {
                     BackendService.defaultErrorTreatment(err);
                 }).finally(() => {
                 context.setState({
                     name: "",
-                    authLevel: 0,
+                    email: "",
                     creating: false
                 });
             });
         } else {
-            alertify.error("El nombre del rol está vacío. Debe tener algún valor");
+            alertify.error("El nombre y/o correo está(n) vacío(s). Revisa los valores!");
         }
     }
     render() {
-        let {name, authLevel, creating} = this.state;
+        let {name, email, creating} = this.state;
+        const getRoles = () => {
+            return new Promise(function(resolve, reject) {
+                RoleService.getRoleList(localStorage.getItem("auth_token"))
+                .then(function(response) {
+                    let opts = [];
+                    response.data.forEach(element => {
+                        opts.push({
+                            value: element.id,
+                            label: element.name
+                        });
+                    });
+                    resolve(opts);
+                }).catch(function (err) {
+                    reject(err);
+                })
+            });
+        }
+
         return(
             <div className="card-body">
-                <h4 className="header-title">Crear roles</h4>
-                <p className="card-title-desc">Recuerda que el nivel de autorización determina los permisos del usuario.
-                </p>
+                <h4 className="header-title">Crear usuarios</h4>
 
                 <div className="form-group row">
                     <label htmlFor="example-text-input" className="col-md-6 col-form-label">Nombre</label>
@@ -59,19 +88,24 @@ class UserForm extends Component {
                     </div>
                 </div>
 
-                <div className="form-group row mb-0">
-                    <label className="col-md-6 col-form-label">Nivel de autorización</label>
+                <div className="form-group row">
+                    <label htmlFor="example-text-input" className="col-md-6 col-form-label">Email</label>
                     <div className="col-md-6">
-                        <select
-                            className="custom-select"
-                            value={authLevel}
-                            onChange={(e) => this.changeAuthLevel(e)}
-                        >
-                            <option>Seleccione una opción</option>
-                            <option value="0">General</option>
-                            <option value="1">Restringido</option>
-                            <option value="2">Administración</option>
-                        </select>
+                        <input className="form-control" type="text" placeholder="aaron@ejemplo.com"
+                               id="example-text-input" value={email} onChange={(val) => this.changeEmail(val)}/>
+                    </div>
+                </div>
+
+                <div className="form-group row mb-0">
+                    <label className="col-md-6 col-form-label">Roles</label>
+                    <div className="col-md-6">
+                    <AsyncSelect
+                        isMulti
+                        cacheOptions
+                        defaultOptions
+                        loadOptions={getRoles}
+                        onChange={(e) => this.changeSelectedRoles(e)}
+                    />
                     </div>
                 </div>
                 <p></p>
@@ -81,10 +115,10 @@ class UserForm extends Component {
                         <button
                             type="button"
                             className="btn btn-primary waves-effect waves-light"
-                            onClick={() => this.createRol()}
+                            onClick={() => this.createUser()}
                             disabled={creating}
                         >
-                            Crear rol
+                            Crear usuario
                         </button>
                     </div>
 

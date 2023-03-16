@@ -1,3 +1,4 @@
+import avatar from "../../img/avatar.png" 
 
 const Identity = () => {
     const logout_link = "/logout";
@@ -7,7 +8,9 @@ const Identity = () => {
         <div className="dropdown d-inline-block">
             <button type="button" className="btn header-item waves-effect" id="page-header-user-dropdown"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img className="rounded-circle header-profile-user" src={profilePic}
+                <img className="rounded-circle header-profile-user" src={profilePic} onError={() => {
+                    this.onerror=null; this.src={avatar};
+                }}
                     alt="Header Avatar" />
                 <span className="d-none d-sm-inline-block ml-1">{name}</span>
                 <i className="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
