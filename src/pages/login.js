@@ -4,7 +4,7 @@ import backendLogin from "../service/loginService";
 import {useSearchParams} from "react-router-dom";
 
 const LoginPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     let errCode = searchParams.get("err");
     let err = (<p></p>);
     if (errCode === "timeout") {
