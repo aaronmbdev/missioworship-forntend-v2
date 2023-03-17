@@ -5,59 +5,30 @@ import BackendService from "../../service/backendService";
 import AsyncSelect from 'react-select/async';
 import UserService from "../../service/userService";
 
-class UserForm extends Component {
+class UpdateUserForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
-            email: "",
+            id: this.props.user.id || "",
+            name: this.props.user.name || "",
+            email: this.props.user.email || "",
             roles: 0,
             creating: false
         }
     }
-    changeName(e) {
-        this.setState({
-            name: e.target.value
-        })
-    }
-    changeEmail(e) {
-        this.setState({
-            email: e.target.value
-        })
-    }
-    changeSelectedRoles(e) {
-        this.setState({
-            roles: e
-        })
-    }
-    createUser() {
-        let context = this;
-        let {name, roles, email} = this.state;
-        let uploadable_roles = [];
-        roles.forEach(element => {
-            uploadable_roles.push(element.value);
-        });
-        let token = localStorage.getItem("auth_token");
-        if(name !== "" && email !== "") {
-            this.setState({creating: true});
-            UserService.createUser(token, name, email, uploadable_roles)
-                .then(() => {
-                    alertify.success("Se ha creado el usuario "+ name + " correctamente");
-                }).catch((err) => {
-                    BackendService.defaultErrorTreatment(err);
-                }).finally(() => {
-                context.setState({
-                    name: "",
-                    email: "",
-                    creating: false
-                });
-            });
-        } else {
-            alertify.error("El nombre y/o correo está(n) vacío(s). Revisa los valores!");
-        }
-    }
     render() {
-        let {name, email, creating} = this.state;
+        let roles = [];
+        if(this.props.user !== '') {
+            roles = this.props.user.roles.map(opt => {
+                return {label: opt.name, value: opt.id}
+            });
+        }
+        let canUpdate = false;
+        let buttonText = "Editar usuario";
+        if (this.props.user == "") {
+            canUpdate = true;
+            buttonText = "Seleccione para editar";
+        }
         const getRoles = () => {
             return new Promise(function(resolve, reject) {
                 RoleService.getRoleList(localStorage.getItem("auth_token"))
@@ -81,18 +52,44 @@ class UserForm extends Component {
                 <h4 className="header-title">Crear usuarios</h4>
 
                 <div className="form-group row">
+                    <label htmlFor="example-text-input" className="col-md-4 col-form-label">Id</label>
+                    <div className="col-md-8">
+                        <input 
+                            className="form-control" 
+                            type="text"  
+                            id="example-text-input" 
+                            disabled={true} 
+                            readOnly={true}
+                            value={this.props.user.id || ""}
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group row">
                     <label htmlFor="example-text-input" className="col-md-4 col-form-label">Nombre</label>
                     <div className="col-md-8">
-                        <input className="form-control" type="text" placeholder="Super admin"
-                               id="example-text-input" value={name} onChange={(val) => this.changeName(val)}/>
+                        <input 
+                            className="form-control" 
+                            type="text" 
+                            placeholder="Super admin"
+                            id="example-text-input" 
+                            value={this.props.user.name || ""}
+                            onChange={() => {}}
+                        />
                     </div>
                 </div>
 
                 <div className="form-group row">
                     <label htmlFor="example-text-input" className="col-md-4 col-form-label">Email</label>
                     <div className="col-md-8">
-                        <input className="form-control" type="text" placeholder="aaron@ejemplo.com"
-                               id="example-text-input" value={email} onChange={(val) => this.changeEmail(val)}/>
+                        <input 
+                            className="form-control" 
+                            type="text" 
+                            placeholder="aaron@ejemplo.com"
+                            id="example-text-input" 
+                            value={this.props.user.email || ""}
+                            onChange={() => {}}
+                        />
                     </div>
                 </div>
 
@@ -104,7 +101,7 @@ class UserForm extends Component {
                         cacheOptions
                         defaultOptions
                         loadOptions={getRoles}
-                        onChange={(e) => this.changeSelectedRoles(e)}
+                        value={roles}
                     />
                     </div>
                 </div>
@@ -115,10 +112,9 @@ class UserForm extends Component {
                         <button
                             type="button"
                             className="btn btn-primary waves-effect waves-light"
-                            onClick={() => this.createUser()}
-                            disabled={creating}
+                            disabled={canUpdate}
                         >
-                            Crear usuario
+                            {buttonText}
                         </button>
                     </div>
 
@@ -129,4 +125,4 @@ class UserForm extends Component {
     }
 }
 
-export default UserForm;
+export default UpdateUserForm;
