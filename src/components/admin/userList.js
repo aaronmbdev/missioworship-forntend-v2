@@ -2,7 +2,6 @@ import React from "react";
 import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from '@mui/material';
 import BackendService from "../../service/backendService";
-import RoleService from "../../service/roleService";
 import alertify from "alertifyjs";
 import UserService from "../../service/userService";
 import RoleListElement from "./roleListElement";

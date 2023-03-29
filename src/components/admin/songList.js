@@ -1,46 +1,13 @@
-import RoleService from "../../service/roleService";
 import React from "react";
 import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from '@mui/material';
-import AuthLevel from "./authLevel";
 import BackendService from "../../service/backendService";
-import Swal from 'sweetalert2'
+import SongService from "../../service/songService";
 import alertify from "alertifyjs";
 
 class SongList extends React.Component {
 
     tableRef = React.createRef();
-
-    /*deleteSong(id, name) {
-        let context = this;
-        let token = localStorage.getItem("auth_token");
-        Swal.fire({
-            title: 'Confirmación',
-            text: 'Estás a punto de eliminar el rol ' + name + ' esto no puede revertise y los usuarios perderán el rol. ¿Seguro?',
-            icon: 'warning',
-            confirmButtonText: 'Seguro',
-            cancelButtonText: 'Mejor me lo pienso',
-            showCancelButton: true
-          }).then((result) => {
-            if (result.isConfirmed) {
-                if(id !== 1) {
-                    RoleService.deleteRole(token, id)
-                    .then(() => {
-                        alertify.success("Se ha eliminado el rol "+ name + " correctamente");
-                        context.tableRef.current.onQueryChange();
-                    }).catch((err) => {
-                        BackendService.defaultErrorTreatment(err);
-                    })
-                } else {
-                    Swal.fire(
-                    'Error',
-                    'El rol '+ name + ' pertenece a los administradores, si te lo cargas nadie podrá ser administrador.',
-                    'error'
-                    )
-                }
-            }
-          })
-    }*/
 
     render() {
         const defaultMaterialTheme = createTheme();
@@ -53,31 +20,56 @@ class SongList extends React.Component {
                             title="Canciones"
                             tableRef={this.tableRef}
                             columns={[
-                                {title: "Id", field: "id"},
+                                {title: "Id", field: "id", editable: "never"},
                                 {title: "Nombre", field: "name"},
-                                {title: "Nivel de autorización", render: rowData => <AuthLevel level={rowData.clearance}/>}
+                                {title: "Artista", field: "artist"},
+                                {title: "Categoría", field: "rithm"},
+                                {title: "Link al Track", field: "linkToTrack"},
+                                {title: "Link a Youtube", field: "linkToYoutube"},
+                                {title: "Notas", field: "notes"},
+                                {title: "Último domingo", field: "lastSunday", editable: "never"},
+                                
                             ]}
-                            actions={[
-                                {
-                                  icon: 'delete',
-                                  tooltip: 'Eliminar rol',
-                                  onClick: (event, rowData) => this.deleteRole(rowData.id, rowData.name)
-                                },
-                                {
-                                    icon: 'refresh',
-                                    tooltip:'Actualizar datos',
-                                    isFreeAction: true,
-                                    onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange()
-                                }
-                              ]}
+                            editable={{
+                                onRowAdd: newData => 
+                                new Promise((resolve, reject) => {
+                                    setTimeout(() => {
+                                        let token = localStorage.getItem("auth_token");
+                                        SongService.createSong(token, newData)
+                                        .then(() => {
+                                            alertify.success("Se ha creado la canción correctamente");
+                                            resolve();
+                                        }).catch((err) => {
+                                            BackendService.defaultErrorTreatment(err);
+                                            reject();
+                                        })
+                                    }, 3000);
+                                }),
+                                onRowDelete: oldData =>
+                                new Promise((resolve, reject) => {
+                                    setTimeout(() => {
+                                        let token = localStorage.getItem("auth_token");
+                                        SongService.deleteSong(token, oldData.id)
+                                        .then(() => {
+                                            alertify.success("Se ha eliminado la canción "+ oldData.name + " correctamente");
+                                            resolve();
+                                        }).catch((err) => {
+                                            BackendService.defaultErrorTreatment(err);
+                                            reject();
+                                        })
+                                    }, 3000);
+                                })
+                            }}
                               data={query =>
                                 new Promise((resolve) => {
-                                    RoleService.getRoleList(localStorage.getItem("auth_token"))
+                                    let limit = query.pageSize;
+                                    let offset = query.page * limit;
+                                    SongService.getSongList(localStorage.getItem("auth_token"), limit, offset)
                                     .then(function(response) {
                                         resolve({
-                                            data: response.data,
-                                            page: 0,
-                                            totalCount: response.data.length
+                                            data: response.data.values,
+                                            page: query.page,
+                                            totalCount: response.data.total_count
                                         });
                                     }).catch((err) => {
                                         BackendService.defaultErrorTreatment(err);
