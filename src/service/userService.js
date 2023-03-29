@@ -15,10 +15,6 @@ export default class UserService {
 
         });
     }
-    
-    static getUserDetails(token, id) {
-        return null;
-    }
 
     static deleteUser(token, id) {
         let uri = this.user_uri + id;
@@ -27,8 +23,15 @@ export default class UserService {
         });
     }
 
-    static updateUserData(token, name, email, roles) {
-        return null;
+    static updateUserData(token, id, name, email) {
+        let uri = this.user_uri + id;
+        return axios.put(uri, {
+            name: name,
+            email: email
+        }, {
+            headers: BackendService.buildAuthHeader(token)
+
+        });
     }
 
     static getUserList(token, limit, offset) {

@@ -2,7 +2,7 @@ import React from "react";
 import MaterialTable from "material-table";
 import { ThemeProvider, createTheme } from '@mui/material';
 import BackendService from "../../service/backendService";
-import Swal from 'sweetalert2'
+import RoleService from "../../service/roleService";
 import alertify from "alertifyjs";
 import UserService from "../../service/userService";
 import RoleListElement from "./roleListElement";
@@ -15,29 +15,6 @@ class UserList extends React.Component {
 
     tableRef = React.createRef();
 
-    deleteUser(id, name) {
-        let context = this;
-        let token = localStorage.getItem("auth_token");
-        Swal.fire({
-            title: 'Confirmación',
-            text: 'Estás a punto de eliminar el usuario ' + name + ' esto no puede revertise. Si quieres deshabilitarlo sólo tienes que quitarle el correo.',
-            icon: 'warning',
-            confirmButtonText: 'Seguro',
-            cancelButtonText: 'Mejor me lo pienso',
-            showCancelButton: true
-          }).then((result) => {
-            if (result.isConfirmed) {
-                UserService.deleteUser(token, id)
-                .then(() => {
-                    alertify.success("Se ha eliminado el usuario "+ name + " correctamente");
-                    context.tableRef.current.onQueryChange();
-                }).catch((err) => {
-                    BackendService.defaultErrorTreatment(err);
-                })
-            }
-          })
-    }
-
     render() {
         const defaultMaterialTheme = createTheme();
         return (
@@ -48,30 +25,47 @@ class UserList extends React.Component {
                         <MaterialTable 
                             title="Usuario registrados"
                             tableRef={this.tableRef}
+                            editable={{
+                                isEditable: rowData => rowData.id !== 1,
+                                isDeletable: rowData => rowData.id !== 1,
+                                onRowUpdate: (newData, oldData) =>
+                                new Promise((resolve, reject) => {
+                                    setTimeout(() => {
+                                        let token = localStorage.getItem("auth_token");
+                                        UserService.updateUserData(token, oldData.id, newData.name, newData.email)
+                                        .then(() => {
+                                            alertify.success("Se ha editado el usuario "+ newData.name + " correctamente");
+                                            resolve();
+                                        }).catch((err) => {
+                                            BackendService.defaultErrorTreatment(err);
+                                            reject();
+                                        })
+                                    }, 3000);
+                                }),
+                                onRowDelete: oldData =>
+                                new Promise((resolve, reject) => {
+                                    setTimeout(() => {
+                                        let token = localStorage.getItem("auth_token");
+                                        UserService.deleteUser(token, oldData.id)
+                                        .then(() => {
+                                            alertify.success("Se ha eliminado el usuario "+ oldData.name + " correctamente");
+                                            resolve();
+                                        }).catch((err) => {
+                                            BackendService.defaultErrorTreatment(err);
+                                            reject();
+                                        })
+                                    }, 3000);
+                                })
+                            }}
                             columns={[
-                                {title: "Id", field: "id"},
+                                {title: "Id", field: "id", editable: "never"},
                                 {title: "Nombre", field: "name"},
                                 {title: "Correo", field: "email"},
-                                {title: "Roles", render: rowData => <RoleListElement roles={rowData.roles} />}
-                            ]}
-                            actions={[
-                                {
-                                  icon: 'delete',
-                                  tooltip: 'Eliminar usuario',
-                                  onClick: (event, rowData) => this.deleteUser(rowData.id, rowData.name)
-                                },
-                                {
-                                    icon: 'edit',
-                                    tooltip: 'Editar usuario',
-                                    onClick: (event, rowData) => this.props.updateFunc(rowData)
-                                  },
-                                {
-                                    icon: 'refresh',
-                                    tooltip:'Actualizar datos',
-                                    isFreeAction: true,
-                                    onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange()
+                                {title: "Roles", render: rowData => <RoleListElement roles={rowData.roles} />, 
+                                    editable: "never",
                                 }
-                              ]}
+                            ]}
+
                               data={query =>
                                 new Promise((resolve) => {
                                     let limit = query.pageSize;
@@ -89,6 +83,19 @@ class UserList extends React.Component {
                                     });
                                 })
                             }
+                            options={
+                                {
+                                    search: false,
+                                }
+                            }
+                            actions={[
+                                {
+                                    icon: 'refresh',
+                                    tooltip:'Actualizar datos',
+                                    isFreeAction: true,
+                                    onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange()
+                                }
+                              ]}
                         />
                     </ThemeProvider>
                     

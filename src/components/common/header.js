@@ -7,7 +7,7 @@ const Header = () => {
             <div className="navbar-header">
                 <div className="d-flex">
                     <div className="navbar-brand-box">
-                        <a href="index.html" className="logo logo-dark">
+                        <a href="/" className="logo logo-dark">
                             <span className="logo-sm">
                                 <img src="assets/images/logo-sm-dark.png" alt="" height="22" />
                             </span>
@@ -16,7 +16,7 @@ const Header = () => {
                             </span>
                         </a>
     
-                        <a href="index.html" className="logo logo-light">
+                        <a href="/" className="logo logo-light">
                             <span className="logo-sm">
                                 <img src="assets/images/logo-sm-light.png" alt="" height="22" />
                             </span>
