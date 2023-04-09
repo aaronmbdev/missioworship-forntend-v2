@@ -45,6 +45,33 @@ class SongList extends React.Component {
                                         })
                                     }, 3000);
                                 }),
+                                onRowUpdate: (newData, oldData) =>
+                                new Promise((resolve, reject) => {
+                                    setTimeout(() => {
+                                        let token = localStorage.getItem("auth_token");
+                                        let payload = {
+                                            name: newData.name,
+                                            artist: newData.artist,
+                                            rithm: newData.rithm,
+                                            notes: newData.notes
+                                        }
+                                        if(oldData.linkToTrack !== newData.linkToTrack) {
+                                            payload.linkToTrack = newData.linkToTrack;
+                                        }
+                                        if(oldData.linkToYoutube !== newData.linkToYoutube) {
+                                            payload.linkToYoutube = newData.linkToYoutube;
+                                        }
+                                        SongService.updateSong(token, oldData.id, payload)
+                                        .then(() => {
+                                            alertify.success("Se ha editado la canción correctamente");
+                                            resolve();
+                                        }).catch((err) => {
+                                            BackendService.defaultErrorTreatment(err);
+                                            reject();
+                                        })
+                                        resolve();
+                                    }, 3000);
+                                }),
                                 onRowDelete: oldData =>
                                 new Promise((resolve, reject) => {
                                     setTimeout(() => {
@@ -76,6 +103,14 @@ class SongList extends React.Component {
                                     });
                                 })
                             }
+                            actions={[
+                                {
+                                    icon: 'refresh',
+                                    tooltip:'Actualizar datos',
+                                    isFreeAction: true,
+                                    onClick: () => this.tableRef.current && this.tableRef.current.onQueryChange()
+                                }
+                              ]}
                         />
                     </ThemeProvider>
                     

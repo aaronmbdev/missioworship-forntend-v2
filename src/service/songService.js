@@ -24,4 +24,12 @@ export default class SongService {
             headers: BackendService.buildAuthHeader(token)
         });
     }
+
+    static updateSong(token, id, payload) {
+        let uri = this.song_uri + id;
+        return axios.put(uri, payload, {
+            headers: BackendService.buildAuthHeader(token)
+        }
+        );
+    }
 }
