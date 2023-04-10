@@ -1,9 +1,11 @@
 import React from "react";
 import MaterialTable from "material-table";
-import { ThemeProvider, createTheme } from '@mui/material';
+import { Switch, ThemeProvider, createTheme } from '@mui/material';
 import BackendService from "../../service/backendService";
 import SongService from "../../service/songService";
 import alertify from "alertifyjs";
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import LyricsIcon from '@mui/icons-material/Lyrics';
 
 class SongList extends React.Component {
 
@@ -24,10 +26,19 @@ class SongList extends React.Component {
                                 {title: "Nombre", field: "name"},
                                 {title: "Artista", field: "artist"},
                                 {title: "Categoría", field: "rithm"},
-                                {title: "Link al Track", field: "linkToTrack"},
-                                {title: "Link a Youtube", field: "linkToYoutube"},
+                                {title: "Link al Track", field: "linkToTrack", render: rowData => {
+                                    return <a href={rowData.linkToTrack} target="_blank">
+                                        <LyricsIcon/>
+                                    </a>
+                                }},
+                                {title: "Link a Youtube", field: "linkToYoutube", render: rowData => {
+                                    return <a href={rowData.linkToYoutube} target="_blank"><YouTubeIcon /></a>
+                                }},
                                 {title: "Notas", field: "notes"},
                                 {title: "Último domingo", field: "lastSunday", editable: "never"},
+                                {title: "Activa?", field: "active", render: rowData => {
+                                    return <Switch checked={rowData.active} />
+                                }}
                                 
                             ]}
                             editable={{
@@ -53,7 +64,8 @@ class SongList extends React.Component {
                                             name: newData.name,
                                             artist: newData.artist,
                                             rithm: newData.rithm,
-                                            notes: newData.notes
+                                            notes: newData.notes,
+                                            active: newData.active
                                         }
                                         if(oldData.linkToTrack !== newData.linkToTrack) {
                                             payload.linkToTrack = newData.linkToTrack;
