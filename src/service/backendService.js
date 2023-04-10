@@ -2,7 +2,7 @@ import alertify from "alertifyjs";
 
 export default class BackendService {
     static getEndpoint(with_path) {
-        let uri = "https://missio.media";
+        let uri = "https://api.missio.media";
         if(process.env.NODE_ENV === "development") {
             uri = "http://localhost:8080";
         }
