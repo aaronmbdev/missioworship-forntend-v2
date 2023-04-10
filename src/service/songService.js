@@ -32,4 +32,11 @@ export default class SongService {
         }
         );
     }
+
+    static getAvailableRithms(token) {
+        let uri = this.song_uri + "rithms";
+        return axios.get(uri,{
+            headers: BackendService.buildAuthHeader(token)
+        })
+    }
 }
