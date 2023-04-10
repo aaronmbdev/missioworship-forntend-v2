@@ -47,7 +47,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: frontend
-        path: ./dist
+        path: ./build
 
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v2.0
