@@ -6,9 +6,7 @@ import UserForm from "../components/admin/userForm";
 import SongList from "../components/admin/songList";
 
 class AdminSection extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+
     render() {
         return(
             <div>

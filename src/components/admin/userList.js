@@ -8,10 +8,6 @@ import RoleListElement from "./roleListElement";
 
 class UserList extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     tableRef = React.createRef();
 
     render() {
