@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {createTheme, Switch, ThemeProvider} from "@mui/material";
+import {createTheme, ThemeProvider} from "@mui/material";
 import MaterialTable from "material-table";
 import LyricsIcon from "@mui/icons-material/Lyrics";
 import YouTubeIcon from "@mui/icons-material/YouTube";
