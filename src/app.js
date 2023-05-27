@@ -4,6 +4,7 @@ import Menu from "./components/common/menu"
 import AdminSection from "./sections/adminSection";
 import DashboardSection from "./sections/dashboardSection";
 import AttendanceSection from "./sections/attendanceSection";
+import SongsLibrarySection from "./sections/songsLibrarySection";
 
 function App(props) {
 
@@ -16,6 +17,10 @@ function App(props) {
 
     if(props.section === "attendance") {
         section = (<AttendanceSection />);
+    }
+
+    if(props.section === "songs") {
+        section = (<SongsLibrarySection />);
     }
 
   return (

@@ -28,11 +28,11 @@ const Menu = () => {
                                 </a>
                             </li>
 
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <a className="nav-link" href="/planning">
                                     <i className="mdi mdi-notebook mr-2"></i>Planning mensual
                                 </a>
-                            </li>   
+                            </li>   */}
 
                             <li className="nav-item">
                                 <a className="nav-link" href="/canciones">

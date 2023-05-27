@@ -22,6 +22,10 @@ const router = createBrowserRouter([
     element: <App section="attendance" />
   },
   {
+    path: "/canciones",
+    element: <App section="songs" />
+  },
+  {
     path: "/login",
     element: <Login />
   },
