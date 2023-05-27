@@ -7,12 +7,14 @@ export default class AttendanceButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            absent: undefined
+            absent: undefined,
+            lastDate: this.props.year+"-"+this.props.month+"-"+this.props.year
         }
     }
 
     loadCurrentStatus() {
-        if(this.state.absent === undefined) {
+        let propsDate = this.props.year+"-"+this.props.month+"-"+this.props.year;
+        if(this.state.absent === undefined || propsDate !== this.state.lastDate) {
             let token = localStorage.getItem("auth_token");
             let date = MissioUtils.getDateInPostFormat(this.props.day, this.props.month, this.props.year);
             AttendanceService.getAbsences(token, date, date)
@@ -22,7 +24,8 @@ export default class AttendanceButton extends Component {
                         absent = true;
                     }
                     this.setState({
-                        absent: absent
+                        absent: absent,
+                        lastDate: this.props.year+"-"+this.props.month+"-"+this.props.year
                     });
                 }).catch((err) => {
                 BackendService.defaultErrorTreatment(err);
