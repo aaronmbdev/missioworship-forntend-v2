@@ -8,29 +8,29 @@ export default class AttendanceButton extends Component {
         super(props);
         this.state = {
             absent: undefined,
-            lastDate: this.props.year+"-"+this.props.month+"-"+this.props.year
         }
+        this.loadCurrentStatus();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.loadCurrentStatus();
     }
 
     loadCurrentStatus() {
-        let propsDate = this.props.year+"-"+this.props.month+"-"+this.props.year;
-        if(this.state.absent === undefined || propsDate !== this.state.lastDate) {
-            let token = localStorage.getItem("auth_token");
-            let date = MissioUtils.getDateInPostFormat(this.props.day, this.props.month, this.props.year);
-            AttendanceService.getAbsences(token, date, date)
-                .then((response) => {
-                    let absent = false;
-                    if(response.data.length !== 0) {
-                        absent = true;
-                    }
-                    this.setState({
-                        absent: absent,
-                        lastDate: this.props.year+"-"+this.props.month+"-"+this.props.year
-                    });
-                }).catch((err) => {
-                BackendService.defaultErrorTreatment(err);
-            })
-        }
+        let token = localStorage.getItem("auth_token");
+        let date = MissioUtils.getDateInPostFormat(this.props.day, this.props.month, this.props.year);
+        AttendanceService.getAbsences(token, date, date)
+            .then((response) => {
+                let absent = false;
+                if(response.data.length !== 0) {
+                    absent = true;
+                }
+                this.setState({
+                    absent: absent,
+                });
+            }).catch((err) => {
+            BackendService.defaultErrorTreatment(err);
+        })
     }
 
     willBeAbsent() {
@@ -100,7 +100,6 @@ export default class AttendanceButton extends Component {
     }
 
     render() {
-        this.loadCurrentStatus();
         return(
             <div className="col-sm-6 col-xl-3">
                 <div className="card">

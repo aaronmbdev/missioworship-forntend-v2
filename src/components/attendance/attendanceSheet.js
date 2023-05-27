@@ -7,10 +7,19 @@ export default class AttendanceSheet extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: undefined
+            data: undefined,
+            date: this.props.day + "-" + this.props.month + "-" + this.props.year
         }
     }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.fetchInformation();
+    }
+
     componentDidMount() {
+        this.fetchInformation();
+    }
+
+    fetchInformation() {
         let token = localStorage.getItem("auth_token");
         let date = MissioUtils.getDateInPostFormat(this.props.day, this.props.month, this.props.year);
         AttendanceService.getAllAbsences(token, date)
