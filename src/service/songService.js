@@ -14,6 +14,17 @@ export default class SongService {
             headers: BackendService.buildAuthHeader(token)
         });
     }
+
+    static getActiveSongList(token, limit, offset) {
+        return axios.get(this.song_uri  , {
+            params: {
+                limit: limit,
+                offset: offset,
+                activeFilter: "active"
+            },
+            headers: BackendService.buildAuthHeader(token)
+        });
+    }
     static createSong(token, data) {
         return axios.post(this.song_uri, data, {headers: BackendService.buildAuthHeader(token)});
     }
