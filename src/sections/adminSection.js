@@ -4,10 +4,12 @@ import RoleForm from "../components/admin/roleForm";
 import UserList from "../components/admin/userList";
 import UserForm from "../components/admin/userForm";
 import SongList from "../components/admin/songList";
+import MissioUtils from "../service/utils";
 
 class AdminSection extends React.Component {
 
     render() {
+        MissioUtils.isLoggedOrRedirect();
         return(
             <div>
                 <div className="row">

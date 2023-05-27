@@ -2423,3 +2423,12 @@ body[data-layout-size="boxed"] .container-fluid, body[data-layout-size="boxed"] 
 .gallery-box a:hover .overlay-content {
   position: absolute;
   bottom: 12px; }
+
+.btn-circle {
+  width: 100px;
+  height: 100px;
+  padding: 13px 18px;
+  border-radius: 60px;
+  font-size: 15px;
+  text-align: center;
+}

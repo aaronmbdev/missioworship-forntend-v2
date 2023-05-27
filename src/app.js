@@ -3,18 +3,19 @@ import Header from "./components/common/header"
 import Menu from "./components/common/menu"
 import AdminSection from "./sections/adminSection";
 import DashboardSection from "./sections/dashboardSection";
+import AttendanceSection from "./sections/attendanceSection";
 
 function App(props) {
-
-    if(localStorage.getItem('auth_token') === null) {
-        window.location.replace("/login");
-    }
 
     let name = localStorage.getItem("name");
     let section = (<DashboardSection />);
 
     if(props.section === "admin") {
         section = (<AdminSection />);
+    }
+
+    if(props.section === "attendance") {
+        section = (<AttendanceSection />);
     }
 
   return (

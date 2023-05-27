@@ -18,6 +18,10 @@ const router = createBrowserRouter([
     element: <App section="admin" />
   },
   {
+    path: "/asistencia",
+    element: <App section="attendance" />
+  },
+  {
     path: "/login",
     element: <Login />
   },
