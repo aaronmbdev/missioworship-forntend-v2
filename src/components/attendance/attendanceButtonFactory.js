@@ -1,20 +1,8 @@
 import {Component} from "react";
 import AttendanceButton from "./attendanceButton";
+import MissioUtils from "../../service/utils";
 
 export default class AttendanceButtonFactory extends Component {
-    computeSundaysOfTheMonth(month, year) {
-        let sundays = [];
-        let date = new Date(year, month - 1, 1);
-        while (date.getDay() !== 0) {
-            date.setDate(date.getDate() + 1);
-        }
-        sundays.push(date.getDate());
-        while (date.getMonth() === month - 1) {
-            date.setDate(date.getDate() + 7);
-            sundays.push(date.getDate());
-        }
-        return sundays;
-    }
     generateAttendanceButtons(dates) {
         let buttons = [];
         for(let i = 0; i < 4; i++) {
@@ -23,7 +11,7 @@ export default class AttendanceButtonFactory extends Component {
         return buttons;
     }
     render() {
-        let sundays = this.computeSundaysOfTheMonth(this.props.month, this.props.year);
+        let sundays = MissioUtils.computeSundays(this.props.month, this.props.year);
         return(
             <div className="row">
                 {this.generateAttendanceButtons(sundays)}

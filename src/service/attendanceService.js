@@ -13,6 +13,16 @@ export default class AttendanceService {
         });
     }
 
+    static getAllAbsences(token, date) {
+        let uri = this.attendance_uri + "all";
+        return axios.get(uri  , {
+            params: {
+                date: date
+            },
+            headers: BackendService.buildAuthHeader(token)
+        });
+    }
+
     static willBeAbsent(token, date) {
         let uri = this.attendance_uri + "absent";
         return axios.post(uri, {
