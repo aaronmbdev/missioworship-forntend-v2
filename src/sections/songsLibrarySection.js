@@ -1,11 +1,9 @@
 import React, {Component} from "react";
 import {createTheme, Switch, ThemeProvider} from "@mui/material";
 import MaterialTable from "material-table";
-import AsyncSelect from "react-select/async";
 import LyricsIcon from "@mui/icons-material/Lyrics";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import SongService from "../service/songService";
-import alertify from "alertifyjs";
 import BackendService from "../service/backendService";
 
 export default class SongsLibrarySection extends Component {
