@@ -14,7 +14,9 @@ export default class BackendService {
         if(err.response.status === 401) {
             window.location.href = "/login";
         }
-        alertify.error(err.response.data.problems[0]);
+        err.response.data.problems.forEach(problem => {
+            alertify.error(problem);
+        })
     }
 
     static buildAuthHeader(token) {
