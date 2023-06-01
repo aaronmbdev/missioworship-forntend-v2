@@ -2,11 +2,13 @@ import { GoogleLogin } from '@react-oauth/google';
 import alertify from 'alertifyjs';
 import backendLogin from "../service/loginService";
 import {useSearchParams} from "react-router-dom";
+import logo_default from "../img/logo_default.png";
 
 const LoginPage = () => {
     const [searchParams] = useSearchParams();
     let errCode = searchParams.get("err");
     let err = (<p></p>);
+    let no_link = "#"
     if (errCode === "timeout") {
         err = (
             <div className="alert alert-danger mb-0" role="alert">
@@ -20,7 +22,8 @@ const LoginPage = () => {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="text-center mb-5">
-                            <a href="index.html" className="logo"><img src="assets/images/logo-dark.png" height="24" alt="logo" /></a>
+                            <a href={no_link} className="logo"><img src={logo_default} height="128" alt="logo" /></a>
+                            <p></p>
                             <h5 className="font-size-16 text-black-50 mb-4">Missio Worship</h5>
                         </div>
                     </div>
