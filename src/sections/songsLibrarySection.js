@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {createTheme, ThemeProvider} from "@mui/material";
 import MaterialTable from "material-table";
-import LyricsIcon from "@mui/icons-material/Lyrics";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import SongService from "../service/songService";
 import BackendService from "../service/backendService";
@@ -25,11 +24,6 @@ export default class SongsLibrarySection extends Component {
                                         {title: "Nombre", field: "name"},
                                         {title: "Artista", field: "artist"},
                                         {title: "Categoría", field: "rithm"},
-                                        {title: "Link al Track", field: "linkToTrack", render: rowData => {
-                                                return <a href={rowData.linkToTrack} target="_blank" rel="noreferrer">
-                                                    <LyricsIcon/>
-                                                </a>
-                                            }},
                                         {title: "Link a Youtube", field: "linkToYoutube", render: rowData => {
                                                 return <a href={rowData.linkToYoutube} target="_blank" rel="noreferrer">
                                                     <YouTubeIcon />
@@ -37,7 +31,6 @@ export default class SongsLibrarySection extends Component {
                                             }},
 
                                     ]}
-
                                     data={query =>
                                         new Promise((resolve) => {
                                             let limit = query.pageSize;

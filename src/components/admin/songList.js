@@ -5,7 +5,6 @@ import BackendService from "../../service/backendService";
 import SongService from "../../service/songService";
 import alertify from "alertifyjs";
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import LyricsIcon from '@mui/icons-material/Lyrics';
 import AsyncSelect from 'react-select/async';
 
 class SongList extends React.Component {
@@ -50,11 +49,6 @@ class SongList extends React.Component {
                                         onChange={e => props.onChange(e)}
                                     />
                                 )},
-                                {title: "Link al Track", field: "linkToTrack", render: rowData => {
-                                    return <a href={rowData.linkToTrack} target="_blank" rel="noreferrer">
-                                        <LyricsIcon/>
-                                    </a>
-                                }},
                                 {title: "Link a Youtube", field: "linkToYoutube", render: rowData => {
                                     return <a href={rowData.linkToYoutube} target="_blank" rel="noreferrer">
                                         <YouTubeIcon />
@@ -142,6 +136,7 @@ class SongList extends React.Component {
                                     let offset = query.page * limit;
                                     SongService.getSongList(localStorage.getItem("auth_token"), limit, offset)
                                     .then(function(response) {
+                                        console.log(response);
                                         resolve({
                                             data: response.data.values,
                                             page: query.page,
@@ -162,8 +157,6 @@ class SongList extends React.Component {
                               ]}
                         />
                     </ThemeProvider>
-                    
-    
                 </div>
             </div>
         )

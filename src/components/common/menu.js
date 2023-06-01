@@ -20,6 +20,12 @@ const Menu = () => {
     
                     <div className="collapse navbar-collapse" id="topnav-menu-content">
                         <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <a className="nav-link" href="/">
+                                    <i className="mdi mdi-home mr-2"></i>Inicio
+                                </a>
+                            </li>
+
                             <AdminTabLink clearanceLevel={clearanceLevel}/>
     
                             <li className="nav-item">
