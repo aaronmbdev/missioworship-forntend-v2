@@ -1,9 +1,10 @@
-name: Pack and ship (Release)
+name: Pack and ship
 
 on:
   workflow_dispatch:
-  release:
-    types: [created]
+  pull_request:
+    types:
+      - closed
 
 jobs:
   build:
