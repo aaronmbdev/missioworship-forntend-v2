@@ -76,7 +76,7 @@ jobs:
           name: v${{ steps.version.outputs.value }}
           tag: v${{ steps.version.outputs.value }}
           skipIfReleaseExists: true
-          token: ${{ secrets.GITHUB_TOKEN_AARON }}
+          token: ${{ secrets.GH_TOKEN_AARON }}
 
 
   deploy:
