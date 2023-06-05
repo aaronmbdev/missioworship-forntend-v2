@@ -16,6 +16,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Bumping version in package.json
+      uses: kaangokdemir/github-version-bumper@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_NAME: Aaron J. Morales Botton
+        GITHUB_EMAIL: aaron@mbotton.com
+        VERSION_FILE_NAME: package.json
+
     - name: Use Node.js v14.21.1
       uses: actions/setup-node@v3
       with:
@@ -35,6 +43,32 @@ jobs:
       with:
         name: frontend
         path: build/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: sergeysova/jq-action@v2
+        id: version
+        with:
+          cmd: 'jq .version package.json -r'
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: frontend
+          path: ./build
+
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: ./build/*
+          generateReleaseNotes: true
+          makeLatest: true
+          name: v${{ steps.version.outputs.value }}
+          tag: v${{ steps.version.outputs.value }}
+          skipIfReleaseExists: true
+
 
   deploy:
     needs: build
@@ -64,3 +98,10 @@ jobs:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_MISSIO_WORSHIP }}
       timeout-minutes: 1
+
+    - name: Finishing notification
+      uses: xinthink/action-telegram@v1.1
+      with:
+        botToken: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        chatId: ${{ secrets.TELEGRAM_CHAT_ID }}
+        jobStatus: ${{ job.status }}
