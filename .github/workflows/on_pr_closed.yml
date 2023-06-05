@@ -44,40 +44,6 @@ jobs:
         name: frontend
         path: build/
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: sergeysova/jq-action@v2
-        id: version
-        with:
-          cmd: 'jq .version package.json -r'
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: frontend
-          path: ./build
-
-      - name: Release to GitHub
-        uses: opspresso/action-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: v${{ steps.version.outputs.value }}
-          NAME: v${{ steps.version.outputs.value }}
-          ASSET_PATH: ./build/
-
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: ./build/*
-          generateReleaseNotes: true
-          makeLatest: true
-          name: v${{ steps.version.outputs.value }}
-          tag: v${{ steps.version.outputs.value }}
-          skipIfReleaseExists: true
-          token: ${{ secrets.GH_TOKEN_AARON }}
-
 
   deploy:
     needs: build
