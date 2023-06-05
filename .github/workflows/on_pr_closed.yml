@@ -25,11 +25,11 @@ jobs:
     - name: Install Npm 6.14.17
       run: npm install -g npm@6.14.17
 
-    - name: Install dependencies 
-      run: npm install
-
     - name: Bump version
       run: npm version patch
+
+    - name: Install dependencies 
+      run: npm install
 
     - name: Build Frontend
       run: npm run build --prod
