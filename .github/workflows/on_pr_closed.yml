@@ -16,6 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Set up Git
+      run: |
+        git config user.name "Github workflow"
+        git config user.email "aaron@mbotton.com"
+
     - name: Use Node.js v14.21.1
       uses: actions/setup-node@v3
       with:
@@ -25,11 +30,11 @@ jobs:
     - name: Install Npm 6.14.17
       run: npm install -g npm@6.14.17
 
-    - name: Install dependencies 
-      run: npm install
-
     - name: Bump version
       run: npm version patch
+
+    - name: Install dependencies 
+      run: npm install
 
     - name: Build Frontend
       run: npm run build --prod
@@ -38,31 +43,6 @@ jobs:
       with:
         name: frontend
         path: build/
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: sergeysova/jq-action@v2
-        id: version
-        with:
-          cmd: 'jq .version package.json -r'
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: frontend
-          path: ./build
-
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: ./build/*
-          generateReleaseNotes: true
-          makeLatest: true
-          name: v${{ steps.version.outputs.value }}
-          tag: v${{ steps.version.outputs.value }}
-          skipIfReleaseExists: true
 
 
   deploy:
@@ -100,3 +80,4 @@ jobs:
         botToken: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         chatId: ${{ secrets.TELEGRAM_CHAT_ID }}
         jobStatus: ${{ job.status }}
+        skipSuccess: false
