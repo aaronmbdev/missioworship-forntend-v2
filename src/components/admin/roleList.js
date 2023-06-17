@@ -75,7 +75,8 @@ class RoleList extends React.Component {
                               ]}
                               data={query =>
                                 new Promise((resolve) => {
-                                    RoleService.getRoleList(localStorage.getItem("auth_token"))
+                                    let token = localStorage.getItem("auth_token");
+                                    RoleService.getRoleList(token, "")
                                     .then(function(response) {
                                         resolve({
                                             data: response.data,

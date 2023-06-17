@@ -58,9 +58,10 @@ class UserForm extends Component {
     }
     render() {
         let {name, email, creating} = this.state;
-        const getRoles = () => {
+        const getRoles = (inputValue) => {
             return new Promise(function(resolve, reject) {
-                RoleService.getRoleList(localStorage.getItem("auth_token"))
+                let token = localStorage.getItem("auth_token");
+                RoleService.getRoleList(token, inputValue)
                 .then(function(response) {
                     let opts = [];
                     response.data.forEach(element => {

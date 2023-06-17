@@ -134,9 +134,10 @@ class SongList extends React.Component {
                                 new Promise((resolve) => {
                                     let limit = query.pageSize;
                                     let offset = query.page * limit;
-                                    SongService.getSongList(localStorage.getItem("auth_token"), limit, offset)
+                                    let search = query.search;
+                                    let token = localStorage.getItem("auth_token");
+                                    SongService.getSongList(token, limit, offset, search)
                                     .then(function(response) {
-                                        console.log(response);
                                         resolve({
                                             data: response.data.values,
                                             page: query.page,
