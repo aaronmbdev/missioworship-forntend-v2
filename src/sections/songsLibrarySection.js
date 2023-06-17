@@ -35,7 +35,9 @@ export default class SongsLibrarySection extends Component {
                                         new Promise((resolve) => {
                                             let limit = query.pageSize;
                                             let offset = query.page * limit;
-                                            SongService.getActiveSongList(localStorage.getItem("auth_token"), limit, offset)
+                                            let token = localStorage.getItem("auth_token");
+                                            let search = query.search;
+                                            SongService.getActiveSongList(token, limit, offset, search)
                                                 .then(function(response) {
                                                     resolve({
                                                         data: response.data.values,
@@ -49,7 +51,7 @@ export default class SongsLibrarySection extends Component {
                                     }
                                     options={
                                         {
-                                            search: false,
+                                            search: true
                                         }
                                     }
                                     actions={[

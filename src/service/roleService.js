@@ -4,8 +4,11 @@ import BackendService from "./backendService";
 export default class RoleService {
     static role_uri = BackendService.getEndpoint("/v1/role/");
     
-    static getRoleList(token) {
+    static getRoleList(token, searchValue) {
         return axios.get(RoleService.role_uri, {
+            params: {
+                search: searchValue
+            },
             headers: BackendService.buildAuthHeader(token)
         });
     }
