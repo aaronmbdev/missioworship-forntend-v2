@@ -8,12 +8,15 @@ export default class AttendanceButton extends Component {
         super(props);
         this.state = {
             absent: undefined,
+            changed: false
         }
         this.loadCurrentStatus();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.loadCurrentStatus();
+        if(this.state.changed) {
+            this.loadCurrentStatus();
+        }
     }
 
     loadCurrentStatus() {
@@ -27,6 +30,7 @@ export default class AttendanceButton extends Component {
                 }
                 this.setState({
                     absent: absent,
+                    changed: false
                 });
             }).catch((err) => {
             BackendService.defaultErrorTreatment(err);
@@ -39,7 +43,8 @@ export default class AttendanceButton extends Component {
         AttendanceService.willBeAbsent(token, date)
             .then(() => {
                 this.setState({
-                    absent: undefined
+                    absent: undefined,
+                    changed: true
                 })
             }).catch((err) => {
                 BackendService.defaultErrorTreatment(err);
@@ -52,7 +57,8 @@ export default class AttendanceButton extends Component {
         AttendanceService.willAttend(token, date)
             .then(() => {
                 this.setState({
-                    absent: undefined
+                    absent: undefined,
+                    changed: true
                 })
             }).catch((err) => {
             BackendService.defaultErrorTreatment(err);
