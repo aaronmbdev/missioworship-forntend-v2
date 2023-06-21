@@ -64,6 +64,11 @@ export default class MissioUtils {
         return `${parts[2]}/${parts[1]}/${parts[0]}`;
     }
 
+    static extractElementsFromWrittenDate(date) {
+        let parts = date.split("-");
+        return {day: parts[2], month: parts[1], year:parts[0]};
+    }
+
     static #tokenIsValid(token) {
         if (token === null) return false;
         let payload = atob(token.split('.')[1]);
