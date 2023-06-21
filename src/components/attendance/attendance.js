@@ -7,25 +7,7 @@ import AttendanceSheetFactory from "./attendanceSheetFactory";
 export default class Attendance extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            month: (new Date()).getMonth() + 1,
-            year: (new Date()).getFullYear(),
-            avYears: this.computeYears(),
-            avMonths: [
-                { value: 1, label: 'Enero' },
-                { value: 2, label: 'Febrero' },
-                { value: 3, label: 'Marzo' },
-                { value: 4, label: 'Abril' },
-                { value: 5, label: 'Mayo' },
-                { value: 6, label: 'Junio' },
-                { value: 7, label: 'Julio' },
-                { value: 8, label: 'Agosto' },
-                { value: 9, label: 'Septiembre' },
-                { value: 10, label: 'Octubre' },
-                { value: 11, label: 'Noviembre' },
-                { value: 12, label: 'Diciembre' }
-            ]
-        }
+        this.state = MissioUtils.getStateForDateSelection();
     }
     selectMonth(e) {
         this.setState({
@@ -37,16 +19,6 @@ export default class Attendance extends Component {
         this.setState({
             year: e.value
         })
-    }
-
-    computeYears() {
-        let current = (new Date()).getFullYear()
-        return [
-            { value: current - 1, label: (current - 1).toString() },
-            { value: current, label: current.toString() },
-            { value: current + 1, label: (current + 1).toString() },
-            { value: current + 2, label: (current + 2).toString() }
-        ]
     }
 
     render() {
