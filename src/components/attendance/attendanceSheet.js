@@ -55,14 +55,16 @@ export default class AttendanceSheet extends Component {
     }
 
     render() {
+        let mainClazz = "col-xl-3 col-md-6";
         let title = this.props.day + "/" + this.props.month + "/" + this.props.year;
         let subtitle = (<h5 className="text-center font-size-15 mb-4">Ausencias:</h5>);
         if (this.state.showDate !== true) {
             title = "Ausencias del domingo";
             subtitle = (<p></p>);
+            mainClazz = "col-xl-12 col-md-12";
         }
         return(
-            <div className="col-xl-3 col-md-6">
+            <div className={mainClazz}>
                 <div className="card plan-box">
                     <div className="card-body p-4">
                         <div className="media mb-1">
