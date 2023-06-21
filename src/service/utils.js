@@ -1,4 +1,37 @@
 export default class MissioUtils {
+
+    static getStateForDateSelection() {
+        return {
+            month: (new Date()).getMonth() + 1,
+            year: (new Date()).getFullYear(),
+            avYears: this.getAvailableYearsForDateSelection(),
+            avMonths: [
+                { value: 1, label: 'Enero' },
+                { value: 2, label: 'Febrero' },
+                { value: 3, label: 'Marzo' },
+                { value: 4, label: 'Abril' },
+                { value: 5, label: 'Mayo' },
+                { value: 6, label: 'Junio' },
+                { value: 7, label: 'Julio' },
+                { value: 8, label: 'Agosto' },
+                { value: 9, label: 'Septiembre' },
+                { value: 10, label: 'Octubre' },
+                { value: 11, label: 'Noviembre' },
+                { value: 12, label: 'Diciembre' }
+            ]
+        };
+    }
+
+    static getAvailableYearsForDateSelection() {
+        let current = (new Date()).getFullYear()
+        return [
+            { value: current - 1, label: (current - 1).toString() },
+            { value: current, label: current.toString() },
+            { value: current + 1, label: (current + 1).toString() },
+            { value: current + 2, label: (current + 2).toString() }
+        ];
+    }
+
     static isLoggedOrRedirect() {
         let token = localStorage.getItem('auth_token');
         if(!MissioUtils.#tokenIsValid(token)) {
