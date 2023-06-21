@@ -59,12 +59,16 @@ export default class MissioUtils {
         return year + "-" + month + "-" + day;
     }
 
+    static convertPostDateToWritten(date) {
+        let parts = date.split("-");
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
     static #tokenIsValid(token) {
         if (token === null) return false;
         let payload = atob(token.split('.')[1]);
         let expiry = JSON.parse(payload).exp;
         let now = Math.floor(Date.now() / 1000);
         return expiry >= now;
-
     }
 }
