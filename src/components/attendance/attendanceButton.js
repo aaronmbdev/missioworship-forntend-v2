@@ -10,13 +10,20 @@ export default class AttendanceButton extends Component {
             absent: undefined,
             changed: false
         }
+    }
+
+    componentDidMount() {
         this.loadCurrentStatus();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.changed) {
+        if(this.state.changed || this.monthOrYearHasChanges(prevProps, this.props)) {
             this.loadCurrentStatus();
         }
+    }
+
+    monthOrYearHasChanges(prevProps, props) {
+        return prevProps.month !== props.month || prevProps.year !== props.year;
     }
 
     loadCurrentStatus() {
