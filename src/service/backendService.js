@@ -11,15 +11,27 @@ export default class BackendService {
 
     static defaultErrorTreatment(err) {
         console.log(err);
-        if(err.response.status === 401) {
+        let response = err.response;
+        if(response === undefined) {
+            this.#genericErrorProcessing("No se pudo conectar con el servidor");
+            return;
+        }
+        if(response.status === 401) {
             window.location.href = "/login";
         }
-        if(err.code === "ERR_NETWORK") {
-            alertify.error("No se pudo conectar con el servidor");
+        if(response.status === 500) {
+            this.#genericErrorProcessing("Se ha producido un error inesperado. Vuelve a intentarlo más tarde.");
         }
-        err.response.data.problems.forEach(problem => {
-            alertify.error(problem);
-        })
+        let problems = response.data.problems;
+        if(problems !== undefined) {
+            err.response.data.problems.forEach(problem => {
+                alertify.error(problem);
+            });
+        }
+    }
+
+    static #genericErrorProcessing(msg) {
+        alertify.error(msg);
     }
 
     static buildAuthHeader(token) {
