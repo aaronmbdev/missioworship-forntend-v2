@@ -13,8 +13,15 @@ export default class AttendanceSheetFactory extends Component {
     render() {
         let sundays = MissioUtils.computeSundays(this.props.month, this.props.year);
         return(
-            <div className="row">
-                {this.generateAttendanceSheets(sundays)}
+            <div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <button type="button" className="btn btn-primary waves-effect waves-light">Recargar listas</button>
+                    </div>
+                </div>
+                <div className="row mt-3">
+                    {this.generateAttendanceSheets(sundays)}
+                </div>
             </div>
         );
     }
