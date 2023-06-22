@@ -15,7 +15,13 @@ export default class SundayPlanning extends Component {
                         <h4 className="header-title">{title}</h4>
                         <div className="row">
                             <div className="col-lg-6">
-                                <AttendanceSheet showDate={false} day={extracted.day} month={extracted.month} year={extracted.year}/>
+                                <AttendanceSheet
+                                    showDate={false}
+                                    day={extracted.day}
+                                    month={extracted.month}
+                                    year={extracted.year}
+                                    afterReload={() => {}}
+                                />
                             </div>
                             <div className="col-lg-6">
                                 <SongListForSunday date={this.props.selected} />

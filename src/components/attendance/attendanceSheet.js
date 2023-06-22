@@ -19,6 +19,7 @@ export default class AttendanceSheet extends Component {
         let triggerUpdate = this.props.triggerUpdate || false;
         if(this.dateHasChanged(prevProps, this.props) || triggerUpdate === true) {
             this.fetchInformation();
+            this.props.afterReload();
         }
     }
 
