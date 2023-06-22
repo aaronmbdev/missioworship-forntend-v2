@@ -13,13 +13,19 @@ export default class AttendanceSheet extends Component {
             date: this.props.day + "-" + this.props.month + "-" + this.props.year,
             showDate: showDate
         }
+        this.fetchInformation();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.fetchInformation();
+        let triggerUpdate = this.props.triggerUpdate || false;
+        if(this.dateHasChanged(prevProps, this.props) || triggerUpdate === true) {
+            this.fetchInformation();
+        }
     }
 
-    componentDidMount() {
-        this.fetchInformation();
+    dateHasChanged(prevProps, props) {
+        return prevProps.day !== props.day ||
+            prevProps.month !== props.month ||
+            prevProps.year !== props.year;
     }
 
     fetchInformation() {
