@@ -10,7 +10,6 @@ export default function backendLogin(token) {
     }).then(function (response) {
         let new_token = response.data;
         let decoded = jwt_decode(new_token);
-        console.log(decoded);
         localStorage.setItem("auth_token", new_token);
         localStorage.setItem("email", decoded.email);
         localStorage.setItem("name", decoded.name);

@@ -14,6 +14,9 @@ export default class BackendService {
         if(err.response.status === 401) {
             window.location.href = "/login";
         }
+        if(err.code === "ERR_NETWORK") {
+            alertify.error("No se pudo conectar con el servidor");
+        }
         err.response.data.problems.forEach(problem => {
             alertify.error(problem);
         })
