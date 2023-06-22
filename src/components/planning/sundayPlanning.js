@@ -9,7 +9,6 @@ export default class SundayPlanning extends Component {
         if (this.props.selected != null) {
             title = "Planificación para el día " + MissioUtils.convertPostDateToWritten(this.props.selected);
             let extracted = MissioUtils.extractElementsFromWrittenDate(this.props.selected);
-            console.log(extracted);
             return (
                 <div className="card">
                     <div className="card-body">
