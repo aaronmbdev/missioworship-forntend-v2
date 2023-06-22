@@ -8,9 +8,7 @@ export default class SongListForSunday extends Component {
     requestSongsAvailable(inputValue) {
         return new Promise(function(resolve, reject) {
             let token = localStorage.getItem("auth_token");
-            let limit = 10;
-            let offset = 0;
-            SongService.getActiveSongList(token, limit, offset, inputValue)
+            SongService.getActiveSongList(token, 10, 0, inputValue)
                 .then(function(response) {
                     let opts = [];
                     response.data.values.forEach(elem => {
@@ -22,6 +20,7 @@ export default class SongListForSunday extends Component {
                     resolve(opts);
                 }).catch((err) => {
                 BackendService.defaultErrorTreatment(err);
+                reject(err);
             });
         });
     }
@@ -43,10 +42,9 @@ export default class SongListForSunday extends Component {
                             <label className="col-md-4 col-form-label">{diasText[i]} canción</label>
                             <div className="col-md-8">
                                 <AsyncSelect
-                                    isMulti
                                     cacheOptions
                                     defaultOptions
-                                    loadOptions={input => {this.requestSongsAvailable(input)}}
+                                    loadOptions={this.requestSongsAvailable}
                                 />
                             </div>
                         </div>
