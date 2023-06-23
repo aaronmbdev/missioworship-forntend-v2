@@ -1,4 +1,37 @@
 export default class MissioUtils {
+
+    static getStateForDateSelection() {
+        return {
+            month: (new Date()).getMonth() + 1,
+            year: (new Date()).getFullYear(),
+            avYears: this.getAvailableYearsForDateSelection(),
+            avMonths: [
+                { value: 1, label: 'Enero' },
+                { value: 2, label: 'Febrero' },
+                { value: 3, label: 'Marzo' },
+                { value: 4, label: 'Abril' },
+                { value: 5, label: 'Mayo' },
+                { value: 6, label: 'Junio' },
+                { value: 7, label: 'Julio' },
+                { value: 8, label: 'Agosto' },
+                { value: 9, label: 'Septiembre' },
+                { value: 10, label: 'Octubre' },
+                { value: 11, label: 'Noviembre' },
+                { value: 12, label: 'Diciembre' }
+            ]
+        };
+    }
+
+    static getAvailableYearsForDateSelection() {
+        let current = (new Date()).getFullYear()
+        return [
+            { value: current - 1, label: (current - 1).toString() },
+            { value: current, label: current.toString() },
+            { value: current + 1, label: (current + 1).toString() },
+            { value: current + 2, label: (current + 2).toString() }
+        ];
+    }
+
     static isLoggedOrRedirect() {
         let token = localStorage.getItem('auth_token');
         if(!MissioUtils.#tokenIsValid(token)) {
@@ -26,12 +59,21 @@ export default class MissioUtils {
         return year + "-" + month + "-" + day;
     }
 
+    static convertPostDateToWritten(date) {
+        let parts = date.split("-");
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+
+    static extractElementsFromWrittenDate(date) {
+        let parts = date.split("-");
+        return {day: parts[2], month: parts[1], year:parts[0]};
+    }
+
     static #tokenIsValid(token) {
         if (token === null) return false;
         let payload = atob(token.split('.')[1]);
         let expiry = JSON.parse(payload).exp;
         let now = Math.floor(Date.now() / 1000);
         return expiry >= now;
-
     }
 }

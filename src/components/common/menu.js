@@ -10,6 +10,17 @@ const AdminTabLink = (props) => {
     return (<p></p>);
 }
 
+const PlanningLink = (props) => {
+    if(props.clearanceLevel === "2") {
+        return (<li className="nav-item">
+            <a className="nav-link" href="/planning">
+                <i className="mdi mdi-notebook mr-2"></i>Planning dominical
+            </a>
+        </li>);
+    }
+    return (<p></p>);
+}
+
 
 const Menu = () => {
     const clearanceLevel = localStorage.getItem("clearanceLevel") || 0;
@@ -26,7 +37,7 @@ const Menu = () => {
                                 </a>
                             </li>
 
-                            <AdminTabLink clearanceLevel={clearanceLevel}/>
+                            <AdminTabLink clearanceLevel={clearanceLevel} />
     
                             <li className="nav-item">
                                 <a className="nav-link" href="/asistencia">
@@ -34,11 +45,7 @@ const Menu = () => {
                                 </a>
                             </li>
 
-                            {/* <li className="nav-item">
-                                <a className="nav-link" href="/planning">
-                                    <i className="mdi mdi-notebook mr-2"></i>Planning mensual
-                                </a>
-                            </li>   */}
+                            <PlanningLink clearanceLevel={clearanceLevel} />
 
                             <li className="nav-item">
                                 <a className="nav-link" href="/canciones">

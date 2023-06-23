@@ -6,17 +6,27 @@ import MissioUtils from "../../service/utils";
 export default class AttendanceSheet extends Component {
     constructor(props) {
         super(props);
+        let showDate = this.props.showDate;
+        if (showDate === undefined) showDate = true;
         this.state = {
             data: undefined,
-            date: this.props.day + "-" + this.props.month + "-" + this.props.year
+            date: this.props.day + "-" + this.props.month + "-" + this.props.year,
+            showDate: showDate
         }
+        this.fetchInformation();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.fetchInformation();
+        let triggerUpdate = this.props.triggerUpdate || false;
+        if(this.dateHasChanged(prevProps, this.props) || triggerUpdate === true) {
+            this.fetchInformation();
+            this.props.afterReload();
+        }
     }
 
-    componentDidMount() {
-        this.fetchInformation();
+    dateHasChanged(prevProps, props) {
+        return prevProps.day !== props.day ||
+            prevProps.month !== props.month ||
+            prevProps.year !== props.year;
     }
 
     fetchInformation() {
@@ -45,26 +55,37 @@ export default class AttendanceSheet extends Component {
             );
             i++;
         });
+        if(users.length === 0) {
+            return (<p>No hay ausencias</p>);
+        }
         return users;
     }
 
     render() {
+        let mainClazz = "col-xl-3 col-md-6";
+        let title = this.props.day + "/" + this.props.month + "/" + this.props.year;
+        let subtitle = (<h5 className="text-center font-size-15 mb-4">Ausencias:</h5>);
+        if (this.state.showDate !== true) {
+            title = "Ausencias del domingo";
+            subtitle = (<p></p>);
+            mainClazz = "col-xl-12 col-md-12";
+        }
         return(
-            <div className="col-xl-3 col-md-6">
+            <div className={mainClazz}>
                 <div className="card plan-box">
                     <div className="card-body p-4">
                         <div className="media mb-1">
                             <div className="avatar-xs mr-3">
-                                                <span className="avatar-title rounded-circle bg-primary">
-                                                    <i className="ti-calendar"></i>
-                                                </span>
+                                <span className="avatar-title rounded-circle bg-primary">
+                                    <i className="ti-calendar"></i>
+                                </span>
                             </div>
                             <div className="media-body">
-                                <h5 className="font-size-16">{this.props.day} / {this.props.month} / {this.props.year}</h5>
+                                <h5 className="font-size-16">{title}</h5>
                             </div>
                         </div>
                         <div className="plan-features mt-4">
-                            <h5 className="text-center font-size-15 mb-4">Ausencias:</h5>
+                            {subtitle}
                             {this.generateUsersMissing()}
                         </div>
                     </div>

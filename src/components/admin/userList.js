@@ -73,7 +73,6 @@ class UserList extends React.Component {
                                             totalCount: response.data.total_count
                                         });
                                     }).catch((err) => {
-                                        console.log(err);
                                         BackendService.defaultErrorTreatment(err);
                                     });
                                 })
