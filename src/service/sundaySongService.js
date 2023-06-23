@@ -23,4 +23,13 @@ export default class SundaySongService {
         }, {headers: BackendService.buildAuthHeader(token)});
     }
 
+    static deleteAllSongsForDate(token, date) {
+        return axios.delete(this.song_uri, {
+            params: {
+                date: date
+            },
+            headers: BackendService.buildAuthHeader(token)
+        })
+    }
+
 }

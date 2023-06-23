@@ -12,7 +12,9 @@ export default class SongListForSunday extends Component {
             song_one: null,
             song_two: null,
             song_three: null,
-            song_four: null
+            song_four: null,
+            button_enabled: true,
+            delete_button_enabled: true
         }
     }
 
@@ -43,12 +45,12 @@ export default class SongListForSunday extends Component {
                     song_four: {label: forth_song.name, value: forth_song.id},
                 })
             }).catch((err) => {
-                this.state = {
+                this.setState({
                     song_one: null,
                     song_two: null,
                     song_three: null,
                     song_four: null
-                }
+                });
                 if(err.response.status !== 404) {
                     BackendService.defaultErrorTreatment(err);
                 }
@@ -130,23 +132,62 @@ export default class SongListForSunday extends Component {
             alertify.error("Tienes que seleccionar las cuatro canciones para continuar");
             return "";
         }
+        this.setState({
+            button_enabled: false
+        });
         SundaySongService.postSongsForDate(token, date, song_one, song_two, song_three, song_four)
             .then(() => {
                 alertify.success("Las canciones se han guardado correctamente");
             }).catch((err) => {
                 BackendService.defaultErrorTreatment(err);
-        })
+            }).finally(() => {
+                this.setState({
+                    button_enabled: true
+                });
+            });
     }
+
+    deleteAllOptsForDate() {
+        let date = this.props.date;
+        let token = localStorage.getItem("auth_token");
+        this.setState({
+            delete_button_enabled: false
+        });
+        SundaySongService.deleteAllSongsForDate(token, date)
+            .then(() => {
+                this.setState({
+                    song_one: null,
+                    song_two: null,
+                    song_three: null,
+                    song_four: null,
+                });
+                alertify.success("Las canciones se han borrado correctamente");
+            }).catch((err) => {
+                BackendService.defaultErrorTreatment(err);
+            }).finally(() => {
+                this.setState({
+                    delete_button_enabled: true
+                });
+            })
+    }
+
     render() {
         let dropdowns = this.generateListOfSongs();
+        let {button_enabled, delete_button_enabled} = this.state;
         return(
         <div>
             {dropdowns}
             <div className="row mt-4">
-                <div className="col-md-12">
+                <div className="col-md-6">
                     <button type="button"
                             className="btn btn-primary btn-lg waves-effect waves-light"
-                    onClick={() => this.uploadSongOptions()}>Guardar cambios
+                    onClick={() => this.uploadSongOptions()} disabled={!button_enabled}>Guardar cambios
+                    </button>
+                </div>
+                <div className="col-md-6">
+                    <button type="button"
+                            className="btn btn-danger btn-lg waves-effect waves-light"
+                            onClick={() => this.deleteAllOptsForDate()} disabled={!delete_button_enabled}>Borrar todas las canciones
                     </button>
                 </div>
             </div>
