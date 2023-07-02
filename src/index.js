@@ -7,6 +7,7 @@ import App from './app';
 import Login from "./pages/login"
 import Logout from './pages/logout';
 import NotFound from './pages/404';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,8 @@ const router = createBrowserRouter([
   }
 ]);
 
+serviceWorkerRegistration.register();
+
 ReactDOM.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId="814123100848-ik8e9eqiqspe1omihljdi0hmpb9ab80l.apps.googleusercontent.com">
@@ -51,3 +54,4 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
