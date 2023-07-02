@@ -7,11 +7,11 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-import { clientsClaim } from 'workbox-core';
-import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import {clientsClaim} from 'workbox-core';
+import {ExpirationPlugin} from 'workbox-expiration';
+import {createHandlerBoundToURL, precacheAndRoute} from 'workbox-precaching';
+import {registerRoute} from 'workbox-routing';
+import {StaleWhileRevalidate} from 'workbox-strategies';
 
 let CACHE_NAME = 'pwa-task-manager';
 let urlsToCache = [
@@ -77,11 +77,26 @@ self.addEventListener('message', (event) => {
 
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        caches.match(event.request).then(() => {
-            return fetch(event.request).catch(() => caches.match('offline.html'));
-        })
-    );
+    if (event.request.mode === "navigate") {
+        event.respondWith(
+            (async () => {
+                try {
+                    const preloadResponse = await event.preloadResponse;
+                    if (preloadResponse) {
+                        return preloadResponse;
+                    }
+
+                    return await fetch(event.request);
+                } catch (error) {
+                    console.log("Fetch failed; returning offline page instead.", error);
+
+                    const cache = await caches.open(CACHE_NAME);
+                    return await cache.match(process.env.PUBLIC_URL + '/offline.html');
+                }
+            })()
+        );
+    }
+
 });
 
 self.addEventListener('install', function(event) {
