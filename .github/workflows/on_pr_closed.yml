@@ -36,7 +36,7 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        github_token: ${{ secrets.GH_TOKEN_AARON }}
+        github_token: ${{ secrets.GH_PAT_MIDOKURA }}
         branch: ${{ github.ref }}
 
     - name: Install dependencies 
