@@ -18,8 +18,8 @@ jobs:
 
     - name: Set up Git
       run: |
-        git config user.name "Github workflow"
-        git config user.email "aaron@mbotton.com"
+        git config --global user.name "Github workflow"
+        git config --global user.email "aaron@mbotton.com"
 
     - name: Use Node.js v14.21.1
       uses: actions/setup-node@v3
@@ -36,8 +36,6 @@ jobs:
     - name: Commit changes
       shell: bash
       run: |
-        git config --global user.email "aaron@mbotton.com"
-        git config --global user.name "Cloud Automation"
         git push     
 
     - name: Install dependencies 
