@@ -41,7 +41,6 @@ jobs:
         git add package.json
         git add package-lock.json
         git commit -m 'chore: [auto] Update ${{ env.cversion }} image version to ${{ steps.bump_version.outputs.next-version }}'
-        git diff
         git push     
 
     - name: Install dependencies 
