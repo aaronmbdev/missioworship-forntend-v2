@@ -33,10 +33,11 @@ jobs:
     - name: Bump version
       run: npm version patch
 
-    - name: Commit changes
-      shell: bash
-      run: |
-        git push     
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
 
     - name: Install dependencies 
       run: npm install
