@@ -1,6 +1,14 @@
 import MissioUtils from "../service/utils"
 import {Component} from "react";
+import alertify from "alertifyjs";
 export default class DashboardSection extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            deferredPrompt: undefined
+        }
+    }
+
     componentDidMount() {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -12,10 +20,12 @@ export default class DashboardSection extends Component {
 
     async install() {
         let deferredPrompt = this.state.deferredPrompt;
-        if(deferredPrompt != null) {
+        if(deferredPrompt !== undefined) {
             deferredPrompt.prompt();
             const {outcome} = await deferredPrompt.userChoice;
             console.log(outcome);
+        } else {
+            alertify.notify("Esta característica está deshabilitada temporalmente.")
         }
     }
     render() {
