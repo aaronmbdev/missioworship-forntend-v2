@@ -5,12 +5,17 @@ export default class SongService {
 
     static song_uri = BackendService.getEndpoint("/v1/songs/");
 
-    static getSongList(token, limit, offset, search) {
+    static getSongList(token, limit, offset, search, availableOnly) {
+        let activeFilter = "unactive";
+        if(availableOnly) {
+            activeFilter = "active";
+        }
         return axios.get(this.song_uri  , {
             params: {
                 limit: limit,
                 offset: offset,
-                search: search
+                search: search,
+                activeFilter: activeFilter
             },
             headers: BackendService.buildAuthHeader(token)
         });

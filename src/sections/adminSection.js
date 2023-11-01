@@ -36,9 +36,13 @@ class AdminSection extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-lg-12">
-                       <SongList />
+                       <SongList disponibles={true} title="Canciones disponibles"/>
                     </div>
-                
+                </div>
+                <div className="row">
+                    <div className="col-lg-12">
+                       <SongList disponibles={false} title="Canciones propuestas por el grupo"/>
+                    </div>
                 </div>
             </div>
         )
