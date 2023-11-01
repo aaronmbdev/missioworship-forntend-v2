@@ -8,6 +8,13 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import AsyncSelect from 'react-select/async';
 
 class SongList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            enabledOnly: props.disponibles,
+            title: props.title
+        }
+    }
 
     tableRef = React.createRef();
 
@@ -30,10 +37,11 @@ class SongList extends React.Component {
             });
         }
         const defaultMaterialTheme = createTheme();
+        const availableOnly = this.state.enabledOnly;
         return (
             <div className="card">
                 <div className="card-body">
-                    <h4 className="header-title">Lista de canciones disponibles</h4>  
+                    <h4 className="header-title">{this.state.title}</h4>  
                     <ThemeProvider theme={defaultMaterialTheme}>
                         <MaterialTable 
                             title="Canciones"
@@ -136,7 +144,7 @@ class SongList extends React.Component {
                                     let offset = query.page * limit;
                                     let search = query.search;
                                     let token = localStorage.getItem("auth_token");
-                                    SongService.getSongList(token, limit, offset, search)
+                                    SongService.getSongList(token, limit, offset, search, availableOnly)
                                     .then(function(response) {
                                         resolve({
                                             data: response.data.values,
